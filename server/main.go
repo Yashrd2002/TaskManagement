@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"task-management-backend/handlers"
 	"task-management-backend/middlewares"
 	"task-management-backend/utils"
@@ -37,5 +38,12 @@ func main() {
 	r.GET("/gettask", middlewares.AuthMiddleware(), handlers.GetTask)
 	r.DELETE("/delete/:id", middlewares.AuthMiddleware(), handlers.DeleteTask)
 
-	r.Run(":8080")
+	// Get the PORT environment variable or default to 8080
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	// Bind to the PORT environment variable
+	r.Run(":" + port)
 }
