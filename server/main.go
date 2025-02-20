@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"os"
 	"task-management-backend/handlers"
 	"task-management-backend/middlewares"
@@ -9,6 +11,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -39,11 +42,15 @@ func main() {
 	r.DELETE("/delete/:id", middlewares.AuthMiddleware(), handlers.DeleteTask)
 
 	// Get the PORT environment variable or default to 8080
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	port := os.Getenv("PORT")
+	fmt.Println("Server is running on port:", port)
 	if port == "" {
 		port = "8080"
 	}
-
 	// Bind to the PORT environment variable
 	r.Run(":" + port)
 }
